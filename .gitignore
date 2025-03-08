@@ -1,0 +1,13 @@
+# Build artifacts
+*.zip
+
+# Temporary files
+*.log
+*.bak
+*.tmp
+
+# Editor/IDE files
+.codium/
+
+# OS-specific files
+.DS_Store 
