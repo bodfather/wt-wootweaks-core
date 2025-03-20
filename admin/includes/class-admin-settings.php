@@ -16,7 +16,7 @@ class WT_Core_Admin_Settings {
 			'WooTweaks Core Settings',  // Page title
 			'WooTweaks',                // Menu title
 			'manage_options',           // Capability
-			'wt_wootweaks',             // Menu slug
+			'wt-wootweaks',             // Menu slug
 			array( $this, 'create_admin_page' ),
 			'none',
 			55.5                        // Position
@@ -41,7 +41,7 @@ class WT_Core_Admin_Settings {
 			<div class="wootweaks-content content-wrap">
 				<nav class="wootweaks-tabs settings-tabs" role="tablist">
 					<?php foreach ( $tabs as $tab_key => $tab_label ) : ?>
-						<a href="?page=wt_wootweaks&tab=<?php echo esc_attr( $tab_key ); ?>" 
+						<a href="?page=wt-wootweaks&tab=<?php echo esc_attr( $tab_key ); ?>" 
 							class="nav-tab <?php echo $active_tab === $tab_key ? 'nav-tab-active' : ''; ?>"
 							role="tab"
 							aria-selected="<?php echo $active_tab === $tab_key ? 'true' : 'false'; ?>">
@@ -53,7 +53,7 @@ class WT_Core_Admin_Settings {
 					<form method="post" action="options.php">
 						<?php
 						settings_fields( 'wt_plugin_option_group' );
-						do_settings_sections( 'wt_wootweaks' );
+						do_settings_sections( 'wt-wootweaks' );
 						if ( array_key_exists( $active_tab, $tabs ) ) {
 							include WOOTWEAKS_PLUGIN_DIR . "admin/partials/tab-{$active_tab}.php";
 						}

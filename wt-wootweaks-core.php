@@ -65,7 +65,7 @@ class WT_Core_Plugin {
 	}
 
 	public function enqueue_admin_assets( $hook ) {
-		if ( strpos( $hook, 'wt_wootweaks' ) === false ) {
+		if ( strpos( $hook, 'wt-wootweaks' ) === false ) {
 			return;
 		}
 
