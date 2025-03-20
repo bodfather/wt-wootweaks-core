@@ -2,7 +2,7 @@
 /*
 Plugin Name: WooTweaks Core
 Description: The core menu for WooTweaks suite of plugins, enhancing WooCommerce functionality.
-Version: 0.0.1
+Version: 0.0.2
 Author: Bodfather
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -15,59 +15,83 @@ Text Domain: wt-wootweaks
 Tags: woocommerce, tweaks, customization, admin
 Requires PHP: 7.2
 Update URI: https://api.github.com/repos/bodfather/wt-wootweaks-core/releases/latest
-Banner URI: /assets/banner.jpg
-Icon URI: /assets/icon.png
+Banner URI: /assets/banner-772x250.jpg
+Icon URI: /assets/icon-128x128.png
 Short Description: Core plugin for managing WooTweaks suite and WooCommerce settings.
 */
 
 // Safety first
 if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Location: https://yourwebsite.com/welcome.php' ); // Replace with your desired redirect
+	header( 'Location: https://bodmerch.com/welcome.php' );
 	exit;
 }
 
-// Enqueue Font Awesome for admin styles
-function wt_wootweaks_enqueue_admin_styles() {
-	wp_enqueue_style( 'fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css', array(), '5.15.1' );
-}
-add_action( 'admin_enqueue_scripts', 'wt_wootweaks_enqueue_admin_styles' );
+// Define plugin constants
+define( 'WOOTWEAKS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'WOOTWEAKS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-// Add the WooTweaks admin menu
-function wt_wootweaks_admin_menu() {
-	add_menu_page(
-		'WooTweaks',           // Page title
-		'WooTweaks',           // Menu title
-		'manage_options',      // Capability
-		'wt-wootweaks',        // Menu slug (unique identifier)
-		'wt_wootweaks_dashboard', // Callback function
-		'none',                // Icon (we'll use custom CSS instead)
-		55.5                   // Position
-	);
-}
-add_action( 'admin_menu', 'wt_wootweaks_admin_menu' );
+// Include necessary files
+require_once WOOTWEAKS_PLUGIN_DIR . 'includes/api-token-manager.php';
+require_once WOOTWEAKS_PLUGIN_DIR . 'includes/updater.php';
+require_once WOOTWEAKS_PLUGIN_DIR . 'includes/class-plugin-info.php'; // Add this
+require_once WOOTWEAKS_PLUGIN_DIR . 'admin/includes/class-admin-settings.php';
 
-// Dashboard page content
-function wt_wootweaks_dashboard() {
-	?>
-	<div class="wrap">
-		<h1>Welcome to WooTweaks</h1>
-		<p>Configure your WooCommerce settings from here.</p>
-	</div>
-	<?php
-}
+// Initialize the plugin
+class WT_Core_Plugin {
+	private static $instance = null;
 
-// Custom icon for the admin menu
-function wt_wootweaks_admin_styles() {
-	?>
-	<style>
-		#adminmenu .toplevel_page_wt-wootweaks .wp-menu-image:before {
-			font-family: "Font Awesome 5 Free";
-			content: "\f044"; /* Font Awesome unicode for "edit" icon */
-			font-weight: 900; /* Required for solid icons in Font Awesome 5 */
+	public static function get_instance() {
+		if ( self::$instance === null ) {
+			self::$instance = new self();
 		}
-	</style>
-	<?php
-}
-add_action( 'admin_head', 'wt_wootweaks_admin_styles' );
+		return self::$instance;
+	}
 
-?>
+	private function __construct() {
+		// Initialize admin settings
+		$admin_settings = new WT_Core_Admin_Settings();
+		$admin_settings->init();
+
+		// Initialize plugin info
+		$plugin_info = new WT_Wootweaks_Core_Plugin_Info();
+		add_filter( 'plugins_api', array( $plugin_info, 'plugin_info' ), 20, 3 );
+		add_filter( 'plugin_row_meta', array( $plugin_info, 'plugin_row_meta' ), 10, 2 );
+
+		// Add assets
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
+
+		// Setup updater
+		wt_wootweaks_core_setup_plugin_updater( __FILE__ ); // Uncommented for consistency
+	}
+
+	public function enqueue_admin_assets( $hook ) {
+		if ( strpos( $hook, 'wt_wootweaks' ) === false ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'wt-admin-style',
+			WOOTWEAKS_PLUGIN_URL . 'admin/css/admin-style.css',
+			array(),
+			'1.0.0'
+		);
+
+		wp_enqueue_script(
+			'wt-admin-script',
+			WOOTWEAKS_PLUGIN_URL . 'admin/js/admin-script.js',
+			array( 'jquery' ),
+			'1.0.0',
+			true
+		);
+
+		wp_enqueue_style(
+			'fontawesome',
+			'https://use.fontawesome.com/releases/latest/css/all.css',
+			array(),
+			null
+		);
+	}
+}
+
+// Kick off the plugin
+WT_Core_Plugin::get_instance();

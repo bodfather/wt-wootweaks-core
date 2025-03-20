@@ -1,0 +1,70 @@
+#adminmenu .toplevel_page_wt_wootweaks div.wp-menu-image:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f044"; /* This is the FontAwesome unicode for the Top Level Menu Icon. */
+}
+.wootweaks {
+  max-width: 900px;
+  margin: 0 20px 20px 0;
+}
+.wootweaks-header {
+  padding: 10px 0;
+}
+.wootweaks-tabs .nav-tab {
+  margin-bottom: -1px;
+}
+.wootweaks-form table.form-table {
+  margin-top: 20px;
+}
+
+.wootweaks.wrap {
+  margin: 0;
+}
+
+.wrap.emailsig-wrap {
+  padding: 0 20px;
+  margin-left: -20px;
+}
+
+.wootweaks .wootweaks-header {
+  margin-left: -20px;
+  background: #fff;
+  box-sizing: border-box;
+  padding: 0;
+  position: fixed;
+  width: calc(100% - 160px);
+  top: 32px;
+  z-index: 1001;
+  transition: box-shadow 0.05s ease; /* Smooth shadow transition */
+}
+
+/* Add shadow when scrolled */
+.wootweaks .wootweaks-header.is-scrolled {
+  box-shadow: 0 8px 16px 0 rgba(85, 93, 102, 0.3);
+}
+
+.wootweaks .wootweaks-content {
+  margin-top: 60px;
+}
+
+.wootweaks .wootweaks-tabs {
+  margin: 1.5em 0 1em;
+  padding-top: 9px;
+  padding-bottom: 0;
+  display: inline-block;
+  border-bottom: 1px solid #c3c4c7;
+  width: 100%;
+}
+
+.wootweaks .wt-tab-content h2 {
+  margin: 0 0 1em 0;
+}
+
+.wootweaks .wootweaks-header h1 {
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 40px;
+  height: 60px;
+  background: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
